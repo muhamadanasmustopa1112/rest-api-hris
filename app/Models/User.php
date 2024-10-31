@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use Notifiable, HasRoles, HasApiTokens; // Make sure this line is included
 
-    protected $fillable = ['name', 'email', 'password', 'company_id'];
+    protected $fillable = ['name', 'email', 'password', 'company_id', 'companies_user_id'];
 
     protected $hidden = [
         'password',
@@ -21,6 +21,10 @@ class User extends Authenticatable
     public function companies()
     {
         return $this->belongsToMany(Company::class);
+    }
+    public function comapanies_users()
+    {
+        return $this->belongsToMany(CompanyUser::class);
     }
 }
 
