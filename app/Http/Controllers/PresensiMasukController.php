@@ -46,6 +46,19 @@ class PresensiMasukController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        $existingRecord = PresensiMasuk::where('shift_id', $request->shift_id)
+        ->where('companies_users_id', $request->companies_users_id)
+        ->where('tanggal', $request->tanggal)
+        ->first();
+
+        if ($existingRecord) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Anda sudah melakukan absensi hari ini.',
+            ], 422);
+        }
+
+
         $status = null;
 
         $jamMasuk = strtotime($request->jam);
