@@ -30,9 +30,9 @@ class AuthController extends Controller
             'name' => $request->user_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'company_id' => $company->id
+            'company_id' => $company->id,
+            'companies_users_id' => null
         ]);
-
         
         $user->assignRole('admin');
 

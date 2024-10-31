@@ -105,7 +105,8 @@ class CompanyUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make(123456),
-            'company_id' => $request->company_id
+            'company_id' => $request->company_id,
+            'companies_users_id' => $companyUser->id
         ]);
         
         $user->assignRole('employee');
