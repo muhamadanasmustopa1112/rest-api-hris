@@ -50,4 +50,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('presensi-masuk', PresensiMasukController::class);
     Route::apiResource('presensi-keluar', PresensiKeluarController::class);
 
+    Route::get('/perizinan-user/{id}', [PerizinanController::class, 'getPerizinanWhereCompanyUser']);
+    Route::get('/lembur-user/{id}', [LemburController::class, 'getLemburWhereCompanyUser']);
+    Route::get('/kasbon-user/{id}', [KasbonController::class, 'getKasbonWhereCompanyUser']);
+
 });

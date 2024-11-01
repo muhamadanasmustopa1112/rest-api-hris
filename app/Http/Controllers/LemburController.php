@@ -164,4 +164,22 @@ class LemburController extends Controller
             ], 500);
         }
     }
+
+    public function getLemburWhereCompanyUser($id)
+    {
+        try {
+           $data = Lembur::where('companies_users_id', $id)->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => LemburResource::collection($data),
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lembur not found',
+            ], 404);
+        }
+    }
 }

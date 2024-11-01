@@ -187,4 +187,22 @@ class PerizinanController extends Controller
             ], 500);
         }
     }
+
+    public function getPerizinanWhereCompanyUser($id)
+    {
+        try {
+           $data = Perizinan::where('companies_users_id', $id)->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => PerizinanResource::collection($data),
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Perizinan not found',
+            ], 404);
+        }
+    }
 }

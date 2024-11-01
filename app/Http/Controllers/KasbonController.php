@@ -174,4 +174,22 @@ class KasbonController extends Controller
             ], 500);
         }
     }
+
+    public function getKasbonWhereCompanyUser($id)
+    {
+        try {
+           $data = Kasbon::where('companies_users_id', $id)->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => KasbonResource::collection($data),
+            ], 200);
+            
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kasbon not found',
+            ], 404);
+        }
+    }
 }
