@@ -9,12 +9,8 @@ use App\Http\Resources\PerizinanResource;
 
 class PerizinanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-
         try {
 
             $company_id = $request->input('company_id');
