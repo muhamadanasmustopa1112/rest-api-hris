@@ -127,7 +127,6 @@ class CompanyController extends Controller
 
         return response()->json([
             'totals' => [
-                'totalEmployee' => $totalEmployee,
                 'totalPerizinan' => $totalPerizinan,
                 'totalLembur' => $totalLembur,
                 'totalKasbon' => $totalKasbon,
