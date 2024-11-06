@@ -19,8 +19,6 @@ class CompanyUserController extends Controller
     
     public function store(Request $request)
     {
-
-        
         $validator = Validator::make($request->all(), [
             'nik' => 'nullable|string|max:16|unique:companies_users,nik',
             'no_kk' => 'nullable|string|max:16',
@@ -51,23 +49,18 @@ class CompanyUserController extends Controller
             ], 422);      
         }
 
-        
         $fotoKaryawan = $request->file('foto_karyawan') 
             ? $request->file('foto_karyawan')->store('uploads/foto_karyawan', 'public') 
             : null;
 
-        
         $ktpKaryawan = $request->file('ktp_karyawan') 
             ? $request->file('ktp_karyawan')->store('uploads/ktp_karyawan', 'public') 
             : null;
 
-        
         $ijazahKaryawan = $request->file('ijazah_karyawan') 
             ? $request->file('ijazah_karyawan')->store('uploads/ijazah_karyawan', 'public') 
             : null;
 
-        
-   
         $companyUser = CompanyUser::create([
             'nik' => $request->nik,
             'no_kk' => $request->no_kk,

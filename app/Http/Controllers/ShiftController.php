@@ -162,9 +162,11 @@ class ShiftController extends Controller
     {
         $company_id = $request->input('company_id');
 
-        $data = Shift::with(['presensiMasuk','presensiMasuk.companyUser', 'presensiKeluar'])
+        $data = Shift::with(['presensiMasuk', 'presensiMasuk.companyUser', 'presensiKeluar'])
         ->where('company_id', $company_id)
-        ->get();
+        ->whereHas('presensiMasuk', function($query) {
+            $query->whereColumn('tanggal', '=', 'presensiKeluar.tanggal');
+        })->get();
 
         return response()->json([
             'status' => true,
