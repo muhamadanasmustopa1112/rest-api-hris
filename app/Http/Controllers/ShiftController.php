@@ -162,19 +162,14 @@ class ShiftController extends Controller
     {
         $company_id = $request->input('company_id');
 
-        $data = Shift::with(['presensiMasuk', 'presensiMasuk.companyUser', 'presensiKeluar'])
+        $data = Shift::with(['presensiMasuk','presensiMasuk.companyUser', 'presensiKeluar'])
         ->where('company_id', $company_id)
-        ->whereHas('presensiMasuk', function($query) {
-            $query->whereNotNull('tanggal'); // Pastikan presensiMasuk memiliki tanggal
-        })
-        ->whereHas('presensiKeluar', function($query) {
-            $query->whereNotNull('tanggal'); // Pastikan presensiKeluar memiliki tanggal
-        })
-        ->get()
-        ->filter(function($shift) {
-            // Membandingkan tanggal presensiMasuk dan presensiKeluar pada level aplikasi
-            return optional($shift->presensiMasuk)->tanggal === optional($shift->presensiKeluar)->tanggal;
-        });
+        ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => PresensiResource::collection($data),
+        ], 200);
     }
 
     public function getShiftActive(Request $request)
