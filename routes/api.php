@@ -54,5 +54,6 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::get('/lembur-user/{id}', [LemburController::class, 'getLemburWhereCompanyUser']);
     Route::get('/kasbon-user/{id}', [KasbonController::class, 'getKasbonWhereCompanyUser']);
     Route::get('/dashboard/{id}', [CompanyController::class, 'dashboard']);
+    Route::get('/company-detail/{id}', [CompanyController::class, 'getDetailCompany']);
 
 });

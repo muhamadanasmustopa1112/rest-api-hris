@@ -11,7 +11,7 @@ use App\Models\CompanyUser;
 use App\Models\Perizinan;
 use App\Models\Lembur;
 use App\Models\Kasbon;
-
+use App\Http\Resources\CompanyResource;
 
 class CompanyController extends Controller
 {
@@ -147,6 +147,24 @@ class CompanyController extends Controller
                 'totalDecline' => $totalPerizinanDecline
             ],
         ], 200);
+    }
+
+    public function getDetailCompany($id)
+    {
+        $user = Company::with(['users' => function($query) use ($id) {
+            $query->where('company_id', $id)
+                  ->where('id', $id);
+        }])->find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Company User not found'], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $user,
+            'message' => 'Berhasil mengambil data'
+        ], 200);  
     }
 
 }
