@@ -69,4 +69,44 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
+
+    public function changePassword(Request $request)
+    {
+        
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'password' => ['required', 'confirmed', 'min:6'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Mencari pengguna berdasarkan ID
+        $user = User::find($request->id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Pengguna tidak ditemukan'
+            ], 404);
+        }
+
+        // Memeriksa apakah password lama benar
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json([
+                'message' => 'Password lama tidak cocok'
+            ], 400);
+        }
+
+        // Mengubah password pengguna
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password berhasil diperbarui'
+        ], 200);
+    }
 }

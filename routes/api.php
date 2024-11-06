@@ -26,6 +26,7 @@ Route::get('/user', function (Request $request) {
 Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/create-company', [AuthController::class, 'createCompanyAndUser']);
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::post('/register-company', [CompanyController::class, 'register']);
     Route::post('/create-company-user', [CompanyUserController::class, 'store']);
     Route::get('/company-user/{id}', [CompanyUserController::class, 'show']);
