@@ -41,7 +41,10 @@ class PresensiKeluarController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);   
         }
         
         $presensiKeluar = PresensiKeluar::create([

@@ -43,7 +43,10 @@ class PresensiMasukController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);   
         }
 
         $existingRecord = PresensiMasuk::where('shift_id', $request->shift_id)
@@ -54,7 +57,7 @@ class PresensiMasukController extends Controller
         if ($existingRecord) {
             return response()->json([
                 'status' => false,
-                'message' => 'Anda sudah melakukan absensi hari ini.',
+                'errors' => 'Anda sudah melakukan absensi hari ini.',
             ], 422);
         }
 

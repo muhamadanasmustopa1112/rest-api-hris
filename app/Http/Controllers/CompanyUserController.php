@@ -240,11 +240,6 @@ class CompanyUserController extends Controller
                 'success' => true,
                 'message' => 'Employee deleted successfully',
             ], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Employee not found',
-            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
