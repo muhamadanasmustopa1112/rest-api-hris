@@ -70,7 +70,6 @@ class CompanyUserController extends Controller
             'tempat_lahir' => $request->tempat_lahir,
             'no_hp' => $request->no_hp,
             'email' => $request->email,
-            'jabatan' => $request->jabatan,
             'no_hp_darurat' => $request->no_hp_darurat,
             'status' => $request->status,
             'alamat' => $request->alamat,
