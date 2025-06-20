@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('division_id')->constrained('division')->onDelete('cascade');
-            $table->foreignId('jabatan_id')->constrained('division')->onDelete('cascade');
+            $table->foreignId('jabatan_id')->constrained('jabatan')->onDelete('cascade');
             $table->string('nik')->unique()->nullable();
             $table->string('no_kk')->unique()->nullable();
             $table->string('name');
