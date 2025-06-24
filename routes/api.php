@@ -16,6 +16,7 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\JamController;
 use App\Http\Controllers\PresensiMasukController;
 use App\Http\Controllers\PresensiKeluarController;
+use App\Http\Controllers\PerjalananDinasController;
 use App\Http\Middleware\SecureApiMiddleware;
 
 
@@ -38,6 +39,7 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::get('/presensi', [ShiftController::class, 'getPreseni']);
     Route::get('/shift-active', [ShiftController::class, 'getShiftActive']);
 
+    Route::apiResource('perjalanan-dinas', PerjalananDinasController::class);
     Route::apiResource('division', DivisionController::class);
     Route::apiResource('jabatan', JabatanController::class);
     Route::apiResource('jenis-izin', JenisIzinController::class);

@@ -66,4 +66,10 @@ class CompanyUser extends Model
     {
         return $this->belongsTo(Jabatan::class);
     }
+
+    
+    public function perjalananDinas()
+    {
+        return $this->hasMany(PerjalananDinas::class, 'companies_users_id');
+    }
 }

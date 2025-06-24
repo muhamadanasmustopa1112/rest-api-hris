@@ -32,4 +32,9 @@ class Company extends Model
     {
         return $this->hasMany(Shift::class);
     }
+
+    public function perjalananDinas(): HasMany
+    {
+        return $this->hasMany(PerjalananDinas::class);
+    }
 }
