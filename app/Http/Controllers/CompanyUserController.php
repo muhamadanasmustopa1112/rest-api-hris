@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\CompanyUserResource;
 use App\Models\Jabatan; 
+use Spatie\Permission\Models\Role;
 
 class CompanyUserController extends Controller
 {
