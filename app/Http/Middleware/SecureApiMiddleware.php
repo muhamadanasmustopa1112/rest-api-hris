@@ -15,6 +15,9 @@ class SecureApiMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->getMethod() === 'OPTIONS') {
+        return response()->json([], Response::HTTP_OK);
+    }
         $username = env('API_USERNAME');
         $password = env('API_PASSWORD');
 
