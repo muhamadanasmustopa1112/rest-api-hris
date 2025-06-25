@@ -7,7 +7,7 @@ use App\Models\PerjalananDinas;
 
 class PerjalananDinasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = PerjalananDinas::with(['company', 'employee']);
 
