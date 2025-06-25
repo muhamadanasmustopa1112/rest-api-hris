@@ -9,7 +9,21 @@ class PerjalananDinasController extends Controller
 {
     public function index()
     {
-        return PerjalananDinas::with(['company', 'employee'])->get();
+        $query = PerjalananDinas::with(['company', 'employee']);
+
+        if ($request->has('company_id')) {
+            $query->where('company_id', $request->company_id);
+        }
+
+        if ($request->has('employee_id')) {
+            $query->where('companies_users_id', $request->employee_id);
+        }
+
+        $results = $query->get();
+
+        return response()->json([
+            'data' => $results
+        ]);
     }
 
     public function show($id)
