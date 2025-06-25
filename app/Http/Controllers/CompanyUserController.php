@@ -13,6 +13,7 @@ use App\Mail\OrderShipped;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\CompanyUserResource;
+use App\Models\Jabatan; 
 
 class CompanyUserController extends Controller
 {
@@ -101,8 +102,18 @@ class CompanyUserController extends Controller
             'companies_users_id' => $companyUser->id
         ]);
         
-        $user->assignRole('employee');
-        
+        $jabatan = Jabatan::find($request->jabatan_id);
+
+        if ($jabatan) {
+            Role::firstOrCreate([
+                'name' => $jabatan->name,
+                'guard_name' => 'web',
+            ]);
+
+            $user->assignRole($jabatan->name);
+        } else {
+            $user->assignRole('employee');
+        }
 
         return response()->json([
             'success' => true,
