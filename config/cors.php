@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'https://backend-apps.ptspsi.co.id'],
+    'allowed_origins' => ['http://localhost:3000', 'https://hris-api.ptspsi.co.id/'],
 
     'allowed_origins_patterns' => [],
 
