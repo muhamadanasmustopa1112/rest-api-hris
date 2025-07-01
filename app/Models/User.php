@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Laravel\Sanctum\HasApiTokens; // Import HasApiTokens
+use Laravel\Sanctum\HasApiTokens;
 
 
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles, HasApiTokens; // Make sure this line is included
+    use Notifiable, HasRoles, HasApiTokens;
 
     protected $fillable = ['name', 'email', 'password', 'company_id', 'companies_users_id'];
 
@@ -26,5 +26,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(CompanyUser::class);
     }
+
 }
 

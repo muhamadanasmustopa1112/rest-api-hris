@@ -36,7 +36,7 @@ class PresensiMasukController extends Controller
             'shift_id' => 'required|exists:shift,id',
             'companies_users_id' => 'required|exists:companies_users,id',
             'tanggal' => 'required|date',
-            'jam' => 'required|date_format:H:i',
+            'jam' => 'required',
             'latitude' => 'required|string',
             'longtitude' => 'required|string',
             'keterangan' => 'nullable|string',
