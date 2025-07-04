@@ -17,12 +17,16 @@ use App\Http\Controllers\JamController;
 use App\Http\Controllers\PresensiMasukController;
 use App\Http\Controllers\PresensiKeluarController;
 use App\Http\Controllers\PerjalananDinasController;
+use App\Http\Controllers\FaceCompareController;
 use App\Http\Middleware\SecureApiMiddleware;
 
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('/compare-faces', [FaceCompareController::class, 'compareFromApi']);
+
 
 Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
