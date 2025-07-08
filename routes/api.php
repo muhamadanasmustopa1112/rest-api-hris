@@ -42,6 +42,7 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
 
     Route::get('/all-company-user/{id}', [CompanyUserController::class, 'getCompanyUserWhereCompany']);
     Route::get('/presensi', [ShiftController::class, 'getPreseni']);
+    Route::get('/presensi-employee', [ShiftController::class, 'getPresensiEmployee']);
     Route::get('/shift-active', [ShiftController::class, 'getShiftActive']);
 
     Route::apiResource('perjalanan-dinas', PerjalananDinasController::class);

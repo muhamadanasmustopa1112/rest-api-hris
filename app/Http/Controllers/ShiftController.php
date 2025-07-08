@@ -6,6 +6,7 @@ use App\Models\PresensiMasuk;
 use App\Models\PresensiKeluar;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\PresensiResource;
+use Illuminate\Support\Carbon;
 
 
 use Illuminate\Http\Request;
@@ -193,6 +194,54 @@ class ShiftController extends Controller
                 'message' => 'Shift not found',
             ], 404);
         }
+    }
+
+    public function getPresensiEmployee(Request $request)
+    {
+        $companies_users_id = $request->input('companies_users_id');
+
+        if (!$companies_users_id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'companies_users_id is required',
+            ], 400);
+        }
+
+        // Ambil semua presensi masuk dan keluar berdasarkan companies_users_id
+        $presensiMasuk = PresensiMasuk::with('shift')
+            ->where('companies_users_id', $companies_users_id)
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        $presensiKeluar = PresensiKeluar::with('shift')
+            ->where('companies_users_id', $companies_users_id)
+            ->orderBy('tanggal', 'desc')
+            ->get();
+
+        // Gabungkan presensi masuk dan keluar berdasarkan tanggal
+        $data = [];
+
+        foreach ($presensiMasuk as $masuk) {
+            $keluar = $presensiKeluar->first(function ($item) use ($masuk) {
+                return $item->tanggal === $masuk->tanggal;
+            });
+
+            $data[] = [
+                'tanggal' => $masuk->tanggal,
+                'shift' => $masuk->shift->name ?? '-',
+                'jam_masuk' => Carbon::parse($masuk->jam)->format('H:i'),
+                'jam_keluar' => $keluar ? Carbon::parse($keluar->jam)->format('H:i') : null,
+                'status_masuk' => $masuk->status,
+                'status_keluar' => $keluar->status ?? 'Missing Clock-Out',
+                'keterangan_masuk' => $masuk->keteragan,
+                'keterangan_keluar' => $keluar->keteragan ?? null,
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+        ]);
     }
 
  
