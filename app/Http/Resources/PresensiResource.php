@@ -27,7 +27,7 @@ class PresensiResource extends JsonResource
                 'jam_masuk' => date('H:i', strtotime($masuk->jam)),
                 'status_masuk' => $masuk->status,
                 'keterangan_masuk' => $masuk->keteragan,
-                'alamat' => $this->getAddressFromCoordinates($masuk->latitude, $masuk->longtitude),
+                'alamat_masuk' => $this->getAddressFromCoordinates($masuk->latitude, $masuk->longtitude),
             ];
         }
 
@@ -36,36 +36,34 @@ class PresensiResource extends JsonResource
         foreach ($this->presensiKeluar as $keluar) {
             $presensiKeluar[] = [
                 'presensi_keluar_id' => $keluar->id,
+                'companies_user_id' => $keluar->companies_users_id,
+                'tanggal' => $keluar->tanggal,
                 'jam_keluar' => date('H:i', strtotime($keluar->jam)),
                 'status_keluar' => $keluar->status,
                 'keterangan_keluar' => $keluar->keteragan,
+                'alamat_keluar' => $this->getAddressFromCoordinates($keluar->latitude, $keluar->longtitude),
             ];
         }
 
-        // Gabungkan data masuk dan keluar
+        // Gabungkan data masuk dan keluar berdasarkan companies_user_id dan tanggal
         $combinedData = [];
         foreach ($presensiMasuk as $masuk) {
-            // Temukan data keluar yang sesuai jika ada
-            $keluar = array_filter($presensiKeluar, function ($k) use ($masuk) {
-                return $k['presensi_keluar_id'] == $masuk['id'];
+            $keluar = collect($presensiKeluar)->first(function ($k) use ($masuk) {
+                return $k['companies_user_id'] == $masuk['companies_user_id'] &&
+                    $k['tanggal'] == $masuk['tanggal'];
             });
 
-            // Ambil data keluar pertama jika ada
-            $keluar = reset($keluar); // Ambil elemen pertama dari array
+            $combinedEntry = array_merge($masuk, $keluar ?? []);
 
-            // Gabungkan data masuk dan keluar
-            $combinedEntry = array_merge($masuk, $keluar ? $keluar : []);
-
-            // Hanya tambahkan ke combinedData jika ada data presensi masuk
             if (!empty($combinedEntry['companies_user_id'])) {
                 $combinedData[] = [
-                    'presensi' => $combinedEntry, 
+                    'presensi' => $combinedEntry,
                 ];
             }
         }
 
         return [
-            'data' => array_values(array_filter($combinedData)),
+            'data' => array_values($combinedData),
         ];
     }
 
