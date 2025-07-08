@@ -39,7 +39,6 @@ class PresensiKeluarController extends Controller
             'jam' => 'required|',
             'latitude' => 'required|string',
             'longtitude' => 'required|string',
-            'status' => 'nullable|string',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -49,6 +48,24 @@ class PresensiKeluarController extends Controller
                 'errors' => $validator->errors(),
             ], 422);   
         }
+
+        $status = null;
+
+        $jamKeluar = strtotime($request->jam);
+        $jamBatasRecord = Jam::where('shift_id', $request->shift_id)->first();
+        
+        if ($jamBatasRecord) {
+            $jamBatas = strtotime($jamBatasRecord->jam_keluar);
+        
+            if ($jamKeluar <= $jamBatas) {
+                $status = 'Early Leave';
+            } else {
+                $status = 'On Time';
+            }
+        } else {
+            
+            $status = 'Shift tidak ditemukan';
+        }
         
         $presensiKeluar = PresensiKeluar::create([
             'shift_id' => $request->shift_id,
@@ -57,7 +74,7 @@ class PresensiKeluarController extends Controller
             'jam' => $request->jam,
             'latitude' => $request->latitude,
             'longtitude' => $request->longtitude,
-            'status' =>  $request->status ?? '-',
+            'status' =>  $status,
             'keteragan' =>  $request->keterangan ?? '-',
         ]);
 
