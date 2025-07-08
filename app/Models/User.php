@@ -27,5 +27,10 @@ class User extends Authenticatable
         return $this->belongsToMany(CompanyUser::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
 }
 

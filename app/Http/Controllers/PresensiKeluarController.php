@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\PresensiKeluar;
 use App\Models\Jam;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Notification;
 
 class PresensiKeluarController extends Controller
 {
@@ -36,7 +39,7 @@ class PresensiKeluarController extends Controller
             'jam' => 'required|',
             'latitude' => 'required|string',
             'longtitude' => 'required|string',
-            'status' => 'required|string',
+            'status' => 'nullable|string',
             'keterangan' => 'nullable|string',
         ]);
 
@@ -54,14 +57,33 @@ class PresensiKeluarController extends Controller
             'jam' => $request->jam,
             'latitude' => $request->latitude,
             'longtitude' => $request->longtitude,
-            'status' => $request->status,
-            'keteragan' => $request->keterangan,
+            'status' =>  $request->status ?? '-',
+            'keteragan' =>  $request->keterangan ?? '-',
         ]);
- 
-        return response()->json([
-            'status' => true,
-            'message' => 'success',
-        ], 200);
+
+        if ($presensiKeluar) {
+            $user = User::where('companies_users_id', $request->companies_users_id)->first();
+
+            if ($user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'title' => 'Clock-Out Successful',
+                    'body' => 'You have successfully clocked out on ' . Carbon::parse($request->tanggal)->format('D, d F Y') . ' at ' . Carbon::createFromFormat('H:i', $request->jam)->format('h:i A'),
+                    'type' => 'attendance',
+                    'is_read' => false,
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Presensi berhasil dibuat.',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal membuat presensi.',
+            ], 500);
+        }
     }
 
     /**

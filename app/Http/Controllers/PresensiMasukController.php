@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 use App\Models\PresensiMasuk;
 use App\Models\Jam;
+use App\Models\User;
+use App\Models\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
-// use App\Http\Resources\PresensiResource;
-
 use Illuminate\Http\Request;
 
 class PresensiMasukController extends Controller
@@ -71,9 +72,9 @@ class PresensiMasukController extends Controller
             $jamBatas = strtotime($jamBatasRecord->jam_masuk);
         
             if ($jamMasuk <= $jamBatas) {
-                $status = 'Tepat Waktu';
+                $status = 'On Time';
             } else {
-                $status = 'Terlambat';
+                $status = 'Late';
             }
         } else {
             
@@ -90,11 +91,30 @@ class PresensiMasukController extends Controller
             'status' => $status,
             'keteragan' => $request->keterangan,
         ]);
- 
-        return response()->json([
-            'status' => true,
-            'message' => 'success',
-        ], 200);
+
+        if ($presensiMasuk) {
+            $user = User::where('companies_users_id', $request->companies_users_id)->first();
+
+            if ($user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'title' => 'Clock-In Successful',
+                    'body' => 'You have successfully clocked out on ' . Carbon::parse($request->tanggal)->format('D, d F Y') . ' at ' . Carbon::createFromFormat('H:i', $request->jam)->format('h:i A'),
+                    'type' => 'attendance',
+                    'is_read' => false,
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Presensi berhasil dibuat.',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal membuat presensi.',
+            ], 500);
+        }
     }
 
     /**

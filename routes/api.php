@@ -18,6 +18,7 @@ use App\Http\Controllers\PresensiMasukController;
 use App\Http\Controllers\PresensiKeluarController;
 use App\Http\Controllers\PerjalananDinasController;
 use App\Http\Controllers\FaceCompareController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Middleware\SecureApiMiddleware;
 
 
@@ -55,6 +56,7 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::apiResource('jam', JamController::class);
     Route::apiResource('presensi-masuk', PresensiMasukController::class);
     Route::apiResource('presensi-keluar', PresensiKeluarController::class);
+    Route::apiResource('notification', NotificationController::class);
 
     Route::get('/perizinan-user/{id}', [PerizinanController::class, 'getPerizinanWhereCompanyUser']);
     Route::get('/lembur-user/{id}', [LemburController::class, 'getLemburWhereCompanyUser']);
