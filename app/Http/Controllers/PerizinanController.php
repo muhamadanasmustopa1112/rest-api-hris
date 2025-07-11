@@ -235,4 +235,40 @@ class PerizinanController extends Controller
         }
     }
 
+    public function getPerizinanSummaryByCompany($company_id)
+    {
+        try {
+            $pending = Perizinan::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'pending')->count();
+
+            $approved = Perizinan::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'approved')->count();
+
+            $rejected = Perizinan::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'rejected')->count();
+
+            $totalLeave = 12;
+            $usedLeave = $approved;
+            $leaveBalance = null; 
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'pending' => $pending,
+                    'approved' => $approved,
+                    'rejected' => $rejected,
+                    'leave_balance' => $leaveBalance,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil summary perizinan HRD',
+            ], 500);
+        }
+    }
+
 }
