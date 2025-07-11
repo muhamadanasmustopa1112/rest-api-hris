@@ -201,4 +201,38 @@ class PerizinanController extends Controller
             ], 404);
         }
     }
+
+    public function getPerizinanSummary($id)
+    {
+        try {
+            $pending = Perizinan::where('companies_users_id', $id)
+                ->where('status', 'pending')->count();
+
+            $approved = Perizinan::where('companies_users_id', $id)
+                ->where('status', 'approved')->count();
+
+            $rejected = Perizinan::where('companies_users_id', $id)
+                ->where('status', 'rejected')->count();
+
+            $totalLeave = 12;
+            $usedLeave = $approved;
+            $remainingLeave = $totalLeave - $usedLeave;
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'pending' => $pending,
+                    'approved' => $approved,
+                    'rejected' => $rejected,
+                    'leave_balance' => $remainingLeave,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil summary perizinan',
+            ], 500);
+        }
+    }
+
 }
