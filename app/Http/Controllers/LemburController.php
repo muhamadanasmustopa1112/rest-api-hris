@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\LemburResource;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -191,6 +192,92 @@ class LemburController extends Controller
                 'success' => false,
                 'message' => 'Lembur not found',
             ], 404);
+        }
+    }
+
+    public function summary($companyUserId)
+    {
+        try {
+            $total = Lembur::where('companies_users_id', $companyUserId)->count();
+
+            $approved = Lembur::where('companies_users_id', $companyUserId)
+                ->where('status', 'approved')
+                ->count();
+
+            $pending = Lembur::where('companies_users_id', $companyUserId)
+                ->where('status', 'pending')
+                ->count();
+
+            $rejected = Lembur::where('companies_users_id', $companyUserId)
+                ->where('status', 'rejected')
+                ->count();
+
+            $totalApprovedJam = Lembur::where('companies_users_id', $companyUserId)
+                ->where('status', 'approved')
+                ->sum('total_jam');
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil mengambil summary lembur',
+                'data' => [
+                    'total_pengajuan' => $total,
+                    'total_pending' => $pending,
+                    'total_approved' => $approved,
+                    'total_rejected' => $rejected,
+                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2) . ' jam',
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil summary lembur',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getLemburSummaryByCompany($company_id)
+    {
+        try {
+            $pending = Lembur::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'pending')->count();
+
+            $approved = Lembur::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'approved')->count();
+
+            $rejected = Lembur::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'rejected')->count();
+
+            // Total semua lembur
+            $total = Lembur::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->count();
+
+            // Total jam lembur yang disetujui
+            $totalApprovedJam = Lembur::whereHas('companyUser.company', function ($query) use ($company_id) {
+                $query->where('id', $company_id);
+            })->where('status', 'approved')->sum('total_jam');
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'total_pengajuan' => $total,
+                    'pending' => $pending,
+                    'approved' => $approved,
+                    'rejected' => $rejected,
+                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2) . ' jam',
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil summary lembur HRD',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }
