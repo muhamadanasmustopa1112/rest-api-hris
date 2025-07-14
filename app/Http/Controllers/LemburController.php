@@ -224,7 +224,7 @@ class LemburController extends Controller
                     'total_pending' => $pending,
                     'total_approved' => $approved,
                     'total_rejected' => $rejected,
-                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2) . ' jam',
+                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2),
                 ]
             ], 200);
 
@@ -269,7 +269,7 @@ class LemburController extends Controller
                     'pending' => $pending,
                     'approved' => $approved,
                     'rejected' => $rejected,
-                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2) . ' jam',
+                    'total_jam_lembur_disetujui' => round($totalApprovedJam, 2),
                 ],
             ]);
         } catch (\Exception $e) {
