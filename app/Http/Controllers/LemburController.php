@@ -280,4 +280,36 @@ class LemburController extends Controller
             ], 500);
         }
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:approved,rejected',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $lembur = Lembur::find($id);
+
+        if (!$lembur) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lembur tidak ditemukan',
+            ], 404);
+        }
+
+        $lembur->status = $request->status;
+        $lembur->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status lembur berhasil diperbarui',
+        ]);
+    }
+
 }
