@@ -271,4 +271,35 @@ class PerizinanController extends Controller
         }
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|in:approved,rejected',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $perizinan = Perizinan::find($id);
+
+        if (!$perizinan) {
+            return response()->json([
+                'success' => false,
+                'message' => 'perizinan tidak ditemukan',
+            ], 404);
+        }
+
+        $perizinan->status = $request->status;
+        $perizinan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status perizinan berhasil diperbarui',
+        ]);
+    }
+
 }
