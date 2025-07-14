@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Lembur;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\LemburResource;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
+
 
 class LemburController extends Controller
 {
@@ -40,36 +44,42 @@ class LemburController extends Controller
     public function store(Request $request)
     {
         
-        // Validasi permintaan
-        $validator = Validator::make($request->all(), [
-            'companies_users_id' => 'required|exists:companies_users,id',
-            'tanggal' => 'required|date',
-            'jam' => 'required|date_format:H:i',
-            'description' => 'required|string',
-            'status' => 'required|string',
-        ]);
+         try {
+            $validator = Validator::make($request->all(), [
+                'companies_users_id' => 'required|exists:companies_users,id',
+                'tanggal' => 'required|date',
+                'jam' => 'required|date_format:H:i',
+                'jam_keluar' => 'required|date_format:H:i|after:jam',
+                'description' => 'required|string',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        
-        $lembur = Lembur::create([
-            'companies_users_id' => $request->companies_users_id,
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam,
-            'description' => $request->description,
-            'status' => $request->status,       
-        ]);
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
 
-        if($lembur){
+            $jamMasuk = Carbon::createFromFormat('H:i', $request->jam);
+            $jamKeluar = Carbon::createFromFormat('H:i', $request->jam_keluar);
+            $durasi = abs($jamMasuk->diffInMinutes($jamKeluar)) / 60;
+
+            $lembur = Lembur::create([
+                'companies_users_id' => $request->companies_users_id,
+                'tanggal' => $request->tanggal,
+                'jam' => $request->jam,
+                'jam_keluar' => $request->jam_keluar,
+                'total_jam' => $durasi,
+                'description' => $request->description,
+                'status' => 'pending',
+            ]);
+
             return response()->json([
                 'status' => true,
-                'message' => 'success',
-            ], 200);
-        }else {
+                'message' => 'Lembur berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal simpan lembur: ' . $e->getMessage());
             return response()->json([
                 'status' => false,
-                'message' => 'error created',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
             ], 500);
         }
     }

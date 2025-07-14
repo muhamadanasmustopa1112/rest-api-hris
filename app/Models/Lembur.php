@@ -16,6 +16,8 @@ class Lembur extends Model
         'companies_users_id',
         'tanggal',
         'jam',
+        'jam_keluar',
+        'total_jam',
         'description',
         'status',
     ];
