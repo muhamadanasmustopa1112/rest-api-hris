@@ -124,6 +124,7 @@ class LemburController extends Controller
             'companies_users_id' => 'required|exists:companies_users,id',
             'tanggal' => 'required|date',
             'jam' => 'required|date_format:H:i',
+            'jam_keluar' => 'required|date_format:H:i',
             'description' => 'required|string',
             'status' => 'required|string',
         ]);
