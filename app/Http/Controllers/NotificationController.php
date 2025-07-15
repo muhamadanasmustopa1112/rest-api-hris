@@ -58,13 +58,30 @@ class NotificationController extends Controller
 
     public function notificationsUser($userId)
     {
-        $notifications = Notification::where('user_id', $userId)
+        $notifications = Notification::with('user.companyUser')
+            ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $data = $notifications->map(function ($notif) {
+            return [
+                'id' => $notif->id,
+                'title' => $notif->title,
+                'body' => $notif->body,
+                'type' => $notif->type,
+                'is_read' => $notif->is_read,
+                'created_at' => $notif->created_at,
+                'user' => [
+                    'id' => $notif->user->id ?? null,
+                    'name' => $notif->user->name ?? null,
+                    'companies_users_id' => $notif->user->companyUser->id ?? null,
+                ],
+            ];
+        });
+
         return response()->json([
             'status' => true,
-            'data' => $notifications
+            'data' => $data,
         ]);
     }
 }
