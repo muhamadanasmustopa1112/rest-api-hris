@@ -64,6 +64,11 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::get('/perizinan/summary/hrd/{company_id}', [PerizinanController::class, 'getPerizinanSummaryByCompany']);
     Route::patch('/perizinan/{id}/status', [PerizinanController::class, 'updateStatus']);
 
+    Route::patch('/perjalanan-dinas/{id}/status', [PerjalananDinasController::class, 'updateStatus']);
+    Route::get('/perjalanan-dinas/summary/hrd/{company_id}', [PerjalananDinasController::class, 'getPerjalananDinasSummaryByCompany']);
+    Route::get('/perjalanan-dinas/summary/{id}', [PerjalananDinasController::class, 'getPerjalananDinasSummaryByCompanyUser']);
+
+
     Route::get('/lembur-user/{id}', [LemburController::class, 'getLemburWhereCompanyUser']);
     Route::get('/lembur/summary/{id}', [LemburController::class, 'summary']);
     Route::get('/lembur/summary/hrd/{company_id}', [LemburController::class, 'getLemburSummaryByCompany']);
