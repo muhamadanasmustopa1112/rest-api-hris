@@ -57,7 +57,8 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::apiResource('jam', JamController::class);
     Route::apiResource('presensi-masuk', PresensiMasukController::class);
     Route::apiResource('presensi-keluar', PresensiKeluarController::class);
-    Route::apiResource('notification', NotificationController::class);
+    Route::apiResource('notifications', NotificationController::class);
+    Route::get('/notifications/user/{userId}', [NotificationController::class, 'notificationsUser']);
 
     Route::get('/perizinan-user/{id}', [PerizinanController::class, 'getPerizinanWhereCompanyUser']);
     Route::get('/perizinan/summary/{id}', [PerizinanController::class, 'getPerizinanSummary']);

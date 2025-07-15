@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-     public function index($userId)
+     public function index()
     {
-        $notifications = Notification::where('user_id', $userId)
+        $notifications = Notification::with('user') 
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -17,6 +17,7 @@ class NotificationController extends Controller
             'status' => true,
             'data' => $notifications
         ]);
+       
     }
 
     public function store(Request $request)
@@ -52,6 +53,18 @@ class NotificationController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Notifikasi ditandai sebagai sudah dibaca.'
+        ]);
+    }
+
+    public function notificationsUser($userId)
+    {
+        $notifications = Notification::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $notifications
         ]);
     }
 }
