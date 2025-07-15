@@ -167,29 +167,29 @@ class PerjalananDinasController extends Controller
         }
     }
 
-    public function getPerjalananDinasSummaryByCompanyUser($compnies_users_id)
+    public function getPerjalananDinasSummaryByCompanyUser($companies_users_id)
     {
         try {
-            $pending = PerjalananDinas::where('compnies_users_id', $comcompnies_users_idpany_id)
+            $pending = PerjalananDinas::where('compnies_users_id', $companies_users_id)
                 ->where('status', 'pending')
                 ->count();
 
-            $approved = PerjalananDinas::where('compnies_users_id', $compnies_users_id)
+            $approved = PerjalananDinas::where('compnies_users_id', $companies_users_id)
                 ->where('status', 'approved')
                 ->count();
 
-            $rejected = PerjalananDinas::where('compnies_users_id', $compnies_users_id)
+            $rejected = PerjalananDinas::where('compnies_users_id', $companies_users_id)
                 ->where('status', 'rejected')
                 ->count();
 
-            $returned = PerjalananDinas::where('compnies_users_id', $compnies_users_id)
+            $returned = PerjalananDinas::where('compnies_users_id', $companies_users_id)
                 ->where('status', 'return')
                 ->count();
 
-            $total = PerjalananDinas::where('compnies_users_id', $compnies_users_id)->count();
+            $total = PerjalananDinas::where('compnies_users_id', $companies_users_id)->count();
 
             // Hitung total hari dari perjalanan dinas yang disetujui
-            $approvedTrips = PerjalananDinas::where('compnies_users_id', $compnies_users_id)
+            $approvedTrips = PerjalananDinas::where('compnies_users_id', $companies_users_id)
                 ->where('status', 'approved')
                 ->get();
 
