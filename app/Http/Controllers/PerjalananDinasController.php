@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PerjalananDinas;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class PerjalananDinasController extends Controller
 {
