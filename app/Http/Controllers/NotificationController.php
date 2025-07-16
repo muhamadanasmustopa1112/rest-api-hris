@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
-     public function index()
+    public function index(Request $request)
     {
-        $notifications = Notification::with('user') 
+        $companyId = $request->input('company_id');
+
+        $notifications = Notification::whereHas('user', function ($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            })
+            ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -17,7 +22,6 @@ class NotificationController extends Controller
             'status' => true,
             'data' => $notifications
         ]);
-       
     }
 
     public function store(Request $request)
