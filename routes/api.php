@@ -60,6 +60,7 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::apiResource('notifications', NotificationController::class);
     Route::get('/notifications/user/{userId}', [NotificationController::class, 'notificationsUser']);
     Route::post('/notifications/markasread/{userId}', [NotificationController::class, 'markAsRead']);
+    Route::get('/notifications/unread-count/{userId}', [NotificationController::class, 'unreadNotificationCount']);
 
     Route::get('/perizinan-user/{id}', [PerizinanController::class, 'getPerizinanWhereCompanyUser']);
     Route::get('/perizinan/summary/{id}', [PerizinanController::class, 'getPerizinanSummary']);

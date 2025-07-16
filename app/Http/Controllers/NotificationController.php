@@ -73,4 +73,16 @@ class NotificationController extends Controller
             'data' => $notifications,
         ]);
     }
+
+    public function unreadNotificationCount($userId)
+    {
+        $count = Notification::where('user_id', $userId)
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json([
+            'status' => true,
+            'count' => $count,
+        ]);
+    }
 }
