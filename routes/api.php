@@ -70,6 +70,7 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::patch('/perjalanan-dinas/{id}/status', [PerjalananDinasController::class, 'updateStatus']);
     Route::get('/perjalanan-dinas/summary/hrd/{company_id}', [PerjalananDinasController::class, 'getPerjalananDinasSummaryByCompany']);
     Route::get('/perjalanan-dinas/summary/{id}', [PerjalananDinasController::class, 'getPerjalananDinasSummaryByCompanyUser']);
+    Route::get('/perjalanan-dinas/approved/{companiesUsersId}', [PerjalananDinasController::class, 'getApprovedTrips']);
 
 
     Route::get('/lembur-user/{id}', [LemburController::class, 'getLemburWhereCompanyUser']);

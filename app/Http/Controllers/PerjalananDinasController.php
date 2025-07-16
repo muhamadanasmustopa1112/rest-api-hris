@@ -220,4 +220,18 @@ class PerjalananDinasController extends Controller
         }
     }
 
+    public function getApprovedTrips($companiesUsersId)
+    {
+        $approvedTrips = PerjalananDinas::with(['company', 'employee'])
+            ->where('companies_users_id', $companiesUsersId)
+            ->where('status', 'approved')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $approvedTrips
+        ]);
+    }
+
+
 }
