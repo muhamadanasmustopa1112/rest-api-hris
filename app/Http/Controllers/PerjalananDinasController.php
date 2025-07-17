@@ -14,7 +14,9 @@ class PerjalananDinasController extends Controller
         $query = PerjalananDinas::with(['company', 'employee']);
 
         if ($request->has('company_id')) {
-            $query->where('company_id', $request->company_id);
+            $query->whereHas('employee', function ($q) use ($request) {
+                $q->where('company_id', $request->company_id);
+            });
         }
 
         if ($request->has('employee_id')) {
