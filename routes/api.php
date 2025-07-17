@@ -19,6 +19,7 @@ use App\Http\Controllers\PresensiKeluarController;
 use App\Http\Controllers\PerjalananDinasController;
 use App\Http\Controllers\FaceCompareController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LiveAttendanceController;
 use App\Http\Middleware\SecureApiMiddleware;
 
 
@@ -58,6 +59,12 @@ Route::middleware([SecureApiMiddleware::class])->group(function () {
     Route::apiResource('presensi-masuk', PresensiMasukController::class);
     Route::apiResource('presensi-keluar', PresensiKeluarController::class);
     Route::apiResource('notifications', NotificationController::class);
+    Route::apiResource('live-attendance', LiveAttendanceController::class);
+    Route::post('/live-attendance/keluar', [LiveAttendanceController::class, 'updateKeluar']);
+    Route::get('/live-attendance/user/{companies_users_id}', [LiveAttendanceController::class, 'getByUser']);
+    Route::get('/live-attendance/company/{company_id}', [LiveAttendanceController::class, 'getByCompany']);
+
+
     Route::get('/notifications/user/{userId}', [NotificationController::class, 'notificationsUser']);
     Route::post('/notifications/markasread/{userId}', [NotificationController::class, 'markAsRead']);
     Route::get('/notifications/unread-count/{userId}', [NotificationController::class, 'unreadNotificationCount']);
