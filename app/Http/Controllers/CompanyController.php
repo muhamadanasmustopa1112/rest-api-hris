@@ -67,7 +67,7 @@ class CompanyController extends Controller
         $dataLemburSuccess = Lembur::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'success')
+        ->where('status', 'approved')
         ->get();
         $dataLemburDecline = Lembur::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
@@ -84,7 +84,7 @@ class CompanyController extends Controller
         $dataKasbonSuccess = Kasbon::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'success')
+        ->where('status', 'approved')
         ->get();
         $dataKasbonDecline = Kasbon::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
@@ -101,7 +101,7 @@ class CompanyController extends Controller
         $dataPerizinanSuccess = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'success')
+        ->where('status', 'approved')
         ->get();
         $dataPerizinanDecline = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
