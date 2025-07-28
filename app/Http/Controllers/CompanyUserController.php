@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Resources\CompanyUserResource;
 use App\Models\Jabatan; 
 use Spatie\Permission\Models\Role;
+use App\Models\DivisionPosition;
 
 class CompanyUserController extends Controller
 {
@@ -62,6 +63,10 @@ class CompanyUserController extends Controller
         $ijazahKaryawan = $request->file('ijazah_karyawan') 
             ? $request->file('ijazah_karyawan')->store('uploads/ijazah_karyawan', 'public') 
             : null;
+
+
+        DivisionPosition::ensureExists($request->division_id, $request->jabatan_id);
+
 
         $companyUser = CompanyUser::create([
             'nik' => $request->nik,

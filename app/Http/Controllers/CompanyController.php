@@ -62,51 +62,51 @@ class CompanyController extends Controller
         $dataLemburOnProsses = Lembur::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'On Prosses')
+        ->where('status', 'pending')
         ->get();
         $dataLemburSuccess = Lembur::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Success')
+        ->where('status', 'success')
         ->get();
         $dataLemburDecline = Lembur::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Decline')
+        ->where('status', 'rejected')
         ->get();
 
         //kasbon
         $dataKasbonOnProsses = Kasbon::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'On Prosses')
+        ->where('status', 'pending')
         ->get();
         $dataKasbonSuccess = Kasbon::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Success')
+        ->where('status', 'success')
         ->get();
         $dataKasbonDecline = Kasbon::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Decline')
+        ->where('status', 'rejected')
         ->get();
 
         //perizinan
         $dataPerizinanOnProsses = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'On Prosses')
+        ->where('status', 'pending')
         ->get();
         $dataPerizinanSuccess = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Success')
+        ->where('status', 'success')
         ->get();
         $dataPerizinanDecline = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'Decline')
+        ->where('status', 'rejected')
         ->get();
 
         $totalPerizinan = $dataPerizinan->count();
