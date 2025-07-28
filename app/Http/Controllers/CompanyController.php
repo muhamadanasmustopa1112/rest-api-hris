@@ -101,7 +101,7 @@ class CompanyController extends Controller
         $dataPerizinanSuccess = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
         })
-        ->where('status', 'approved')
+        ->where('status', 'Success')
         ->get();
         $dataPerizinanDecline = Perizinan::whereHas('companyUser.company', function ($query) use ($id) {
             $query->where('id', $id);
